@@ -3,7 +3,6 @@ import time, sys, re
 import requests
 import urllib
 import webbrowser
-from http.cookies import SimpleCookie
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
@@ -148,9 +147,10 @@ class ZLZP:
 
         ''' 旧的COOKIE转换成dict1 '''
         oldcookie_dict={}
-        oldcookie = SimpleCookie(oldcookie)
-        for i in oldcookie.values():
-            oldcookie_dict[i.key]=i.value
+        for row in oldcookie.split(';'):
+            row=row.strip()
+            row_split=row.split('=')
+            oldcookie_dict[row_split[0]]=row_split[1]
 
         ''' 新的COOKIE转换成dict1 '''
         newcookie={}
@@ -195,8 +195,6 @@ class ZLZP:
         else:
             print(response.text)
 
-        print(session.cookies.get_dict())
-
     def _start(self):
         checkcode=self._verify()
         print(checkcode)
@@ -207,11 +205,13 @@ class ZLZP:
 if __name__ == "__main__":
     # 初始化
     session = requests.session()
-    obj=ZLZP('pl61880252', 'nj123456')
+    obj=ZLZP('用户名', '密码')
     obj._start()
 
 
-#HTML
+
+手动打码进入控制台，直接点
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -227,13 +227,13 @@ if __name__ == "__main__":
 <img src="code1.jpg" />
 <script src="http://blog.abchack.com/static/jquery.min.js"></script>
 <script type="text/javascript">
-	var xy = '';
-	$('#imgtest').click(function(e){
-	if (xy == ''){
-		xy = (e.pageX - $('#imgtest').offset().left ) +','+ (e.pageY - $('#imgtest').offset().top);
-	}else{
-		xy= xy + ';' + (e.pageX - $('#imgtest').offset().left ) +','+ (e.pageY - $('#imgtest').offset().top);
-	}
+   var xy = '';
+   $('#imgtest').click(function(e){
+   if (xy == ''){
+      xy = (e.pageX - $('#imgtest').offset().left ) +','+ (e.pageY - $('#imgtest').offset().top);
+   }else{
+      xy= xy + ';' + (e.pageX - $('#imgtest').offset().left ) +','+ (e.pageY - $('#imgtest').offset().top);
+   }
     console.log("'" + xy + "'");
 });
 </script>
